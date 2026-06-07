@@ -52,6 +52,7 @@ function App() {
 
   const handleUserUpdate = (updatedUser: any) => {
     dispatch(updateUser(updatedUser));
+
   };
 
   if (loading) {
