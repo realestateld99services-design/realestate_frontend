@@ -29,6 +29,7 @@ export const PropertyDetails: React.FC<PropertyDetailsProps> = ({ user, params }
   const [, navigate] = useLocation();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     (async () => {
       try {
         const r = await apiClient.get(`/properties/${params.id}`);
