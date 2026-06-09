@@ -11,8 +11,8 @@ interface AuthState {
 
 const initialState: AuthState = {
   user: null,
-  token: localStorage.getItem("real_estate_token"),
-  isAuthenticated: !!localStorage.getItem("real_estate_token"),
+  token: sessionStorage.getItem("real_estate_token"),
+  isAuthenticated: !!sessionStorage.getItem("real_estate_token"),
   loading: false,
   error: null,
 };
@@ -27,7 +27,7 @@ const authSlice = createSlice({
       state.isAuthenticated = true;
       state.loading = false;
       state.error = null;
-      localStorage.setItem("real_estate_token", action.payload.token);
+      sessionStorage.setItem("real_estate_token", action.payload.token);
     },
     updateUser(state, action: PayloadAction<any>) {
       state.user = action.payload;
@@ -38,7 +38,7 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.loading = false;
       state.error = null;
-      localStorage.removeItem("real_estate_token");
+      sessionStorage.removeItem("real_estate_token");
     },
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;

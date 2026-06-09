@@ -1,11 +1,38 @@
 import React, { useState } from "react";
 import { useLocation, Link } from "wouter";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, Home, Store, Briefcase, Check } from "lucide-react";
 import { apiClient } from "../lib/api";
 
 interface RegisterProps {
   onRegisterSuccess: (user: any) => void;
 }
+
+const ROLES = [
+  {
+    value: "buyer",
+    label: "Buyer",
+    description: "Looking for properties to purchase or rent",
+    icon: Home,
+    color: "border-blue-500 bg-blue-50 text-blue-700",
+    iconBg: "bg-blue-100 text-blue-600",
+  },
+  {
+    value: "seller",
+    label: "Seller",
+    description: "List and manage your properties",
+    icon: Store,
+    color: "border-amber-500 bg-amber-50 text-amber-700",
+    iconBg: "bg-amber-100 text-amber-600",
+  },
+  {
+    value: "broker",
+    label: "Broker / Agent",
+    description: "Manage deals and represent clients",
+    icon: Briefcase,
+    color: "border-violet-500 bg-violet-50 text-violet-700",
+    iconBg: "bg-violet-100 text-violet-600",
+  },
+];
 
 export const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
   const [username, setUsername] = useState("");
@@ -18,22 +45,16 @@ export const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [, navigate] = useLocation();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setError("");
     setLoading(true);
-
     try {
       const response = await apiClient.post("/auth/register", {
-        username,
-        phone,
-        email: email || null,
-        password,
-        role,
+        username, phone, email: email || null, password, role,
       });
-
       if (response.data.status) {
-        localStorage.setItem("real_estate_token", response.data.token);
+        sessionStorage.setItem("real_estate_token", response.data.token);
         onRegisterSuccess(response.data.user);
         navigate("/dashboard");
       } else {
@@ -47,130 +68,121 @@ export const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
   };
 
   return (
-    <div className="min-h-[80vh] flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="text-center text-3xl font-extrabold text-gray-900 tracking-tight">
-          Create your LD99 Real Estate Account
-        </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Or{" "}
-          <Link href="/login" className="font-medium text-primary-600 hover:text-primary-500">
-            sign in to existing account
-          </Link>
-        </p>
-      </div>
+    <div className="min-h-screen bg-slate-950 flex items-start justify-center px-4 py-24">
+      <div className="w-full max-w-xl slide-up">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-black text-white tracking-tight">Create your account</h1>
+          <p className="text-slate-500 text-sm mt-2">
+            Already have one?{" "}
+            <Link href="/login" className="font-bold text-emerald-400 hover:text-emerald-300 transition">Sign in</Link>
+          </p>
+        </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-2xl sm:px-10 border border-gray-100">
+        <div className="bg-white/4 backdrop-blur-xl border border-white/10 rounded-2xl p-7 shadow-2xl">
           {error && (
-            <div className="mb-4 bg-red-50 border-l-4 border-red-400 p-4 rounded-md">
-              <p className="text-sm text-red-700">{error}</p>
+            <div className="mb-5 flex items-center gap-2.5 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl px-4 py-3 text-sm">
+              <span className="font-black">!</span> {error}
             </div>
           )}
 
-          <form className="space-y-4" onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Role selector */}
             <div>
-              <label htmlFor="username" className="block text-sm font-semibold text-gray-700">
-                Full Name
-              </label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                required
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-primary-500 focus:border-primary-500 text-sm"
-                placeholder="John Doe"
-              />
+              <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2.5">I want to join as</label>
+              <div className="grid grid-cols-3 gap-2">
+                {ROLES.map(({ value, label, icon: Icon }) => {
+                  const active = role === value;
+                  return (
+                    <button
+                      key={value} type="button" onClick={() => setRole(value)}
+                      className={`relative flex flex-col items-center gap-2 p-3 rounded-xl border transition text-center ${
+                        active
+                          ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-300"
+                          : "border-white/10 bg-white/3 text-slate-400 hover:border-white/20 hover:text-slate-300"
+                      }`}
+                    >
+                      {active && (
+                        <span className="absolute top-2 right-2 w-3.5 h-3.5 rounded-full bg-emerald-500 flex items-center justify-center">
+                          <Check size={8} className="text-white" />
+                        </span>
+                      )}
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${active ? "bg-emerald-500/20" : "bg-white/5"}`}>
+                        <Icon size={15} />
+                      </div>
+                      <span className="text-xs font-bold leading-tight">{label}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
-            <div>
-              <label htmlFor="phone" className="block text-sm font-semibold text-gray-700">
-                Phone Number (Include Country Code, e.g. 91...)
-              </label>
-              <input
-                id="phone"
-                name="phone"
-                type="text"
-                required
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-primary-500 focus:border-primary-500 text-sm"
-                placeholder="e.g. 918309470360"
-              />
+            {/* Two-column row */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <FormField label="Full Name" id="username" type="text" required value={username} onChange={setUsername} placeholder="John Doe" />
+              <FormField label="Phone (with code)" id="phone" type="text" required value={phone} onChange={setPhone} placeholder="918309470360" />
             </div>
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-gray-700">
-                Email Address (Optional)
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-primary-500 focus:border-primary-500 text-sm"
-                placeholder="john@example.com"
-              />
-            </div>
+            <FormField label="Email (optional)" id="email" type="email" value={email} onChange={setEmail} placeholder="john@example.com" />
 
+            {/* Password */}
             <div>
-              <label htmlFor="role" className="block text-sm font-semibold text-gray-700">
-                I want to join as a:
-              </label>
-              <select
-                id="role"
-                name="role"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-primary-500 focus:border-primary-500 text-sm bg-white"
-              >
-                <option value="buyer">Buyer (Looking for properties)</option>
-                <option value="seller">Seller (Listing my properties)</option>
-                <option value="broker">Agent/Broker (Managing deals)</option>
-              </select>
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-semibold text-gray-700">
-                Password
-              </label>
-              <div className="relative mt-1">
+              <label htmlFor="password" className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">Password</label>
+              <div className="relative">
                 <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-primary-500 focus:border-primary-500 text-sm pr-12"
-                  placeholder="••••••••"
+                  id="password" type={showPassword ? "text" : "password"} required value={password}
+                  onChange={e => setPassword(e.target.value)} placeholder="••••••••"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-sm placeholder-slate-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/30 transition pr-11"
                 />
                 <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition cursor-pointer"
+                  type="button" onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  className="absolute inset-y-0 right-0 px-3.5 flex items-center text-slate-500 hover:text-slate-300 transition"
                 >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
 
-            <div className="pt-2">
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition disabled:opacity-50"
-              >
-                {loading ? "Registering..." : "Register"}
-              </button>
-            </div>
+            <button
+              type="submit" disabled={loading}
+              className="w-full flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 disabled:opacity-50 text-white font-bold rounded-xl shadow-lg shadow-emerald-500/20 transition-all duration-200 text-sm"
+            >
+              {loading ? (
+                <><span className="animate-spin w-4 h-4 border-2 border-white/30 border-t-white rounded-full" /> Creating account...</>
+              ) : (
+                <>Create Account <ArrowRight size={15} /></>
+              )}
+            </button>
+
+            <p className="text-center text-xs text-slate-600 pt-1">
+              By registering you agree to our <span className="text-slate-400">Terms of Service</span> and <span className="text-slate-400">Privacy Policy</span>.
+            </p>
           </form>
         </div>
+
+        <p className="text-center text-xs text-slate-700 mt-5">
+          &copy; {new Date().getFullYear()} LD99 Real Estate. All rights reserved.
+        </p>
       </div>
     </div>
   );
 };
+
+const FormField = ({
+  label, id, type, required, value, onChange, placeholder,
+}: {
+  label: string; id: string; type: string; required?: boolean;
+  value: string; onChange: (v: string) => void; placeholder: string;
+}) => (
+  <div>
+    <label htmlFor={id} className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">{label}</label>
+    <input
+      id={id} type={type} required={required} value={value}
+      onChange={e => onChange(e.target.value)} placeholder={placeholder}
+      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-sm placeholder-slate-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/30 transition"
+    />
+  </div>
+);
+
 export default Register;

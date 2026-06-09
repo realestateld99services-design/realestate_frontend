@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useLocation, Link } from "wouter";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
 import { apiClient } from "../lib/api";
 
 interface LoginProps {
@@ -9,29 +10,24 @@ interface LoginProps {
 
 export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   const [loginIdentifier, setLoginIdentifier] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [, navigate] = useLocation();
+  const [password, setPassword]               = useState("");
+  const [showPassword, setShowPassword]       = useState(false);
+  const [error, setError]                     = useState("");
+  const [loading, setLoading]                 = useState(false);
+  const [, navigate]                          = useLocation();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setError("");
     setLoading(true);
-
     try {
-      const response = await apiClient.post("/auth/login", {
-        loginIdentifier,
-        password,
-      });
-
-      if (response.data.status) {
-        localStorage.setItem("real_estate_token", response.data.token);
-        onLoginSuccess(response.data.user);
+      const res = await apiClient.post("/auth/login", { loginIdentifier, password });
+      if (res.data.status) {
+        sessionStorage.setItem("real_estate_token", res.data.token);
+        onLoginSuccess(res.data.user);
         navigate("/dashboard");
       } else {
-        setError(response.data.message || "Failed to log in.");
+        setError(res.data.message || "Failed to sign in.");
       }
     } catch (err: any) {
       setError(err.response?.data?.message || "Something went wrong. Please try again.");
@@ -41,82 +37,110 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
   };
 
   return (
-    <div className="min-h-[80vh] flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="text-center text-3xl font-extrabold text-gray-900 tracking-tight">
-          Welcome back to LD99 Real Estate
-        </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Or{" "}
-          <Link href="/register" className="font-medium text-primary-600 hover:text-primary-500">
-            register a new account
-          </Link>
-        </p>
-      </div>
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 py-24">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="w-full max-w-sm"
+      >
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-widest mb-5">
+            <Sparkles size={11} /> Welcome Back
+          </div>
+          <h1 className="text-3xl font-black text-white tracking-tight">Sign in</h1>
+          <p className="text-slate-500 text-sm mt-2">
+            No account?{" "}
+            <Link href="/register" className="text-emerald-400 font-semibold hover:text-emerald-300 transition">
+              Create one free
+            </Link>
+          </p>
+        </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-2xl sm:px-10 border border-gray-100">
+        {/* Card */}
+        <div className="bg-white/4 backdrop-blur-xl border border-white/10 rounded-2xl p-7 shadow-2xl">
           {error && (
-            <div className="mb-4 bg-red-50 border-l-4 border-red-400 p-4 rounded-md">
-              <p className="text-sm text-red-700">{error}</p>
+            <div className="mb-5 flex items-center gap-2.5 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl px-4 py-3 text-sm">
+              <span className="font-black">!</span> {error}
             </div>
           )}
 
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="login" className="block text-sm font-semibold text-gray-700">
-                Phone Number, Email, or Username
-              </label>
-              <input
-                id="login"
-                name="login"
-                type="text"
-                required
-                value={loginIdentifier}
-                onChange={(e) => setLoginIdentifier(e.target.value)}
-                className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-primary-500 focus:border-primary-500 text-sm"
-                placeholder="e.g. 918309470360"
-              />
-            </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <Field
+              label="Phone, Email or Username"
+              id="login"
+              type="text"
+              required
+              value={loginIdentifier}
+              onChange={setLoginIdentifier}
+              placeholder="e.g. 918309470360"
+            />
 
             <div>
-              <label htmlFor="password" className="block text-sm font-semibold text-gray-700">
+              <label htmlFor="password" className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">
                 Password
               </label>
-              <div className="relative mt-1">
+              <div className="relative">
                 <input
                   id="password"
-                  name="password"
                   type={showPassword ? "text" : "password"}
                   required
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-primary-500 focus:border-primary-500 text-sm pr-12"
+                  onChange={e => setPassword(e.target.value)}
                   placeholder="••••••••"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-sm placeholder-slate-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/30 transition pr-11"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition cursor-pointer"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  className="absolute inset-y-0 right-0 px-3.5 flex items-center text-slate-500 hover:text-slate-300 transition"
                 >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
 
-            <div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition disabled:opacity-50"
-              >
-                {loading ? "Signing in..." : "Sign In"}
-              </button>
-            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full mt-2 flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 disabled:opacity-50 text-white font-bold rounded-xl shadow-lg shadow-emerald-500/20 transition-all duration-200 text-sm"
+            >
+              {loading ? (
+                <><span className="animate-spin w-4 h-4 border-2 border-white/30 border-t-white rounded-full" /> Signing in...</>
+              ) : (
+                <>Sign In <ArrowRight size={15} /></>
+              )}
+            </button>
           </form>
         </div>
-      </div>
+
+        <p className="text-center text-xs text-slate-700 mt-5">
+          &copy; {new Date().getFullYear()} LD99 Real Estate. All rights reserved.
+        </p>
+      </motion.div>
     </div>
   );
 };
+
+const Field = ({
+  label, id, type, required, value, onChange, placeholder,
+}: {
+  label: string; id: string; type: string; required?: boolean;
+  value: string; onChange: (v: string) => void; placeholder: string;
+}) => (
+  <div>
+    <label htmlFor={id} className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+      {label}
+    </label>
+    <input
+      id={id} type={type} required={required} value={value}
+      onChange={e => onChange(e.target.value)} placeholder={placeholder}
+      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white text-sm placeholder-slate-600 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/30 transition"
+    />
+  </div>
+);
+
+import React from "react";
 export default Login;
