@@ -889,34 +889,40 @@ function WhyChooseUs() {
 ══════════════════════════════════════════ */
 function CategoriesSection() {
   const cats = [
-    { label: "Apartments",         icon: Building2,  count: "3,200+", grad: "from-blue-600/80 to-blue-800/90" },
-    { label: "Villas",             icon: HomeIcon,   count: "850+",   grad: "from-amber-600/80 to-orange-800/90" },
-    { label: "Independent Houses", icon: TreePine,   count: "1,100+", grad: "from-emerald-600/80 to-green-800/90" },
-    { label: "Commercial",         icon: Briefcase,  count: "480+",   grad: "from-violet-600/80 to-purple-800/90" },
-    { label: "Plots & Land",       icon: Landmark,   count: "960+",   grad: "from-rose-600/80 to-red-800/90" },
-    { label: "Luxury Homes",       icon: Award,      count: "320+",   grad: "from-teal-600/80 to-cyan-800/90" },
+    { label: "Apartments",         icon: Building2,  count: "3,200+", glow: "bg-blue-500/5 group-hover:bg-blue-500/10", border: "border-white/5 group-hover:border-blue-500/30", iconColor: "text-blue-400", shadow: "group-hover:shadow-blue-500/5" },
+    { label: "Villas",             icon: HomeIcon,   count: "850+",   glow: "bg-amber-500/5 group-hover:bg-amber-500/10", border: "border-white/5 group-hover:border-amber-500/30", iconColor: "text-amber-400", shadow: "group-hover:shadow-amber-500/5" },
+    { label: "Independent Houses", icon: TreePine,   count: "1,100+", glow: "bg-emerald-500/5 group-hover:bg-emerald-500/10", border: "border-white/5 group-hover:border-emerald-500/30", iconColor: "text-emerald-400", shadow: "group-hover:shadow-emerald-500/5" },
+    { label: "Commercial",         icon: Briefcase,  count: "480+",   glow: "bg-violet-500/5 group-hover:bg-violet-500/10", border: "border-white/5 group-hover:border-violet-500/30", iconColor: "text-violet-400", shadow: "group-hover:shadow-violet-500/5" },
+    { label: "Plots & Land",       icon: Landmark,   count: "960+",   glow: "bg-rose-500/5 group-hover:bg-rose-500/10", border: "border-white/5 group-hover:border-rose-500/30", iconColor: "text-rose-400", shadow: "group-hover:shadow-rose-500/5" },
+    { label: "Luxury Homes",       icon: Award,      count: "320+",   glow: "bg-teal-500/5 group-hover:bg-teal-500/10", border: "border-white/5 group-hover:border-teal-500/30", iconColor: "text-teal-400", shadow: "group-hover:shadow-teal-500/5" },
   ];
   return (
-    <section id="categories" className="bg-slate-900 py-24">
+    <section id="categories" className="bg-slate-950 py-24 border-t border-b border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Reveal className="text-center mb-14">
           <p className="text-emerald-400 text-xs font-bold uppercase tracking-widest mb-3">Browse by Category</p>
           <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">Explore Property Types</h2>
+          <p className="text-slate-500 text-xs mt-3 max-w-md mx-auto">Browse premium listings categorized by structural configurations and domains.</p>
         </Reveal>
 
         <motion.div
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-40px" }}
           variants={stagger}
-          className="grid grid-cols-2 sm:grid-cols-3 gap-4"
+          className="grid grid-cols-2 sm:grid-cols-3 gap-5"
         >
-          {cats.map(({ label, icon: Icon, count, grad }) => (
+          {cats.map(({ label, icon: Icon, count, glow, border, iconColor, shadow }) => (
             <motion.div key={label} variants={fadeUp}
-              className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${grad} border border-white/10 p-6 cursor-pointer hover:-translate-y-1 transition-all duration-300 hover:shadow-xl min-h-[140px] flex flex-col justify-between`}>
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-white/5" />
-              <Icon size={28} className="text-white/80 group-hover:text-white group-hover:scale-110 transition-all duration-200" />
-              <div>
-                <p className="font-extrabold text-white text-base leading-tight">{label}</p>
-                <p className="text-white/50 text-xs mt-0.5 font-medium">{count} properties</p>
+              className={`group relative overflow-hidden rounded-2xl bg-white/4 ${border} p-6 cursor-pointer hover:-translate-y-1.5 transition-all duration-300 hover:shadow-2xl ${shadow} min-h-[160px] flex flex-col justify-between`}>
+              <div className={`absolute -inset-10 opacity-0 group-hover:opacity-100 transition duration-500 rounded-full blur-2xl ${glow}`} />
+              <div className="relative z-10 flex items-center justify-between">
+                <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center border border-white/10 group-hover:scale-110 group-hover:bg-white/10 transition-all duration-300">
+                  <Icon size={22} className={`${iconColor} transition-transform duration-300`} />
+                </div>
+                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider bg-white/5 px-2.5 py-1 rounded-full border border-white/5">{count}</span>
+              </div>
+              <div className="relative z-10">
+                <p className="font-extrabold text-white text-base leading-tight group-hover:text-emerald-400 transition-colors duration-200">{label}</p>
+                <p className="text-slate-400 text-xs mt-1 font-medium">Browse verified listings</p>
               </div>
             </motion.div>
           ))}
