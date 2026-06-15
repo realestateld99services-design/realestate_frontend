@@ -224,7 +224,7 @@ const Footer = ({ dark }: { dark: boolean }) => {
             <ul className="space-y-3">
               <li className={`flex items-start gap-2 text-xs ${text}`}>
                 <Mail size={12} className="text-emerald-500 shrink-0 mt-0.5" />
-                adminld99.chaithanya@gmail.com
+                realeassets@gmail.com
               </li>
               <li className={`flex items-start gap-2 text-xs ${text}`}>
                 <MapPin size={12} className="text-emerald-500 shrink-0 mt-0.5" />
