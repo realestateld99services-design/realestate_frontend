@@ -771,7 +771,7 @@ function AISearchSection() {
                   <Brain size={16} className="text-white" />
                 </div>
                 <div>
-                  <p className="font-bold text-white text-sm">LD99 AI Assistant</p>
+                  <p className="font-bold text-white text-sm">Real-E-Assets Bot</p>
                   <div className="flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
                     <span className="text-emerald-400 text-[10px] font-medium">Online</span>
