@@ -162,7 +162,7 @@ export const Register: React.FC<RegisterProps> = ({ onRegisterSuccess }) => {
         </div>
 
         <p className="text-center text-xs text-slate-700 mt-5">
-          &copy; {new Date().getFullYear()} LD99 Real Estate. All rights reserved.
+          &copy; {new Date().getFullYear()} LD99 Real-E-Assets. All rights reserved.
         </p>
       </div>
     </div>

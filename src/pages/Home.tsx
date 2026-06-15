@@ -854,7 +854,7 @@ function WhyChooseUs() {
     <section className="bg-slate-950 py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Reveal className="text-center mb-14">
-          <p className="text-emerald-400 text-xs font-bold uppercase tracking-widest mb-3">Why LD99 Real Estate</p>
+          <p className="text-emerald-400 text-xs font-bold uppercase tracking-widest mb-3">Why LD99 Real-E-Assets</p>
           <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight mb-4">
             Built for Buyers, Sellers & Brokers
           </h2>
@@ -1186,7 +1186,7 @@ function CTASection() {
           </h2>
 
           <p className="text-slate-400 text-lg leading-relaxed mb-10 max-w-2xl mx-auto">
-            Join thousands of families who found their perfect home using LD99 Real Estate.
+            Join thousands of families who found their perfect home using LD99 Real-E-Assets.
             AI-powered search, verified listings, and real-time negotiations — all in one place.
           </p>
 

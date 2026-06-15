@@ -274,7 +274,7 @@ export const BuyerDashboard: React.FC<{ user: any; onUserUpdate: (u: any) => voi
         <header className="h-16 bg-slate-900/80 backdrop-blur border-b border-white/5 flex items-center gap-4 px-6 shrink-0">
           <div>
             <h1 className="font-extrabold text-white text-base leading-tight">{VIEW_TITLE[view]}</h1>
-            <p className="text-slate-500 text-xs">LD99 Real Estate · Buyer</p>
+            <p className="text-slate-500 text-xs">LD99 Real-E-Assets · Buyer</p>
           </div>
           <div className="ml-auto flex items-center gap-3">
             <button onClick={() => loadAll(true)} disabled={refreshing}

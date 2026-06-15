@@ -245,7 +245,7 @@ const BrokerDashboard: React.FC<{
             <h1 className="font-extrabold text-white text-base leading-tight capitalize">
               {view === "home" ? "Dashboard" : view === "visits" ? "Walkthrough Visits" : view === "add-property" ? "Add Property" : view === "properties" ? "My Listings" : "KYC Verification"}
             </h1>
-            <p className="text-slate-500 text-xs">LD99 Real Estate · Broker</p>
+            <p className="text-slate-500 text-xs">LD99 Real-E-Assets · Broker</p>
           </div>
           <div className="ml-auto flex items-center gap-3">
             {view !== "add-property" && (

@@ -114,7 +114,7 @@ const SplashLoader = () => (
         />
       ))}
     </div>
-    <p className="text-slate-600 text-xs font-medium tracking-widest uppercase">LD99 Real Estate</p>
+    <p className="text-slate-600 text-xs font-medium tracking-widest uppercase">LD99 Real-E-Assets</p>
   </div>
 );
 
@@ -170,7 +170,7 @@ const Footer = ({ dark }: { dark: boolean }) => {
                 <span className="text-white font-black text-xs">LD</span>
               </div>
               <div>
-                <span className={`block font-extrabold text-sm ${dark ? "text-white" : "text-slate-800"}`}>LD99 Real Estate</span>
+                <span className={`block font-extrabold text-sm ${dark ? "text-white" : "text-slate-800"}`}>LD99 Real-E-Assets</span>
                 <span className="block text-[9px] font-bold text-emerald-500 uppercase tracking-widest">Property Platform</span>
               </div>
             </Link>
@@ -280,7 +280,7 @@ const Footer = ({ dark }: { dark: boolean }) => {
         {/* Bottom bar */}
         <div className={`pt-6 border-t ${div} flex flex-col sm:flex-row items-center justify-between gap-3`}>
           <p className={`text-[11px] ${text}`}>
-            &copy; {new Date().getFullYear()} LD99 Real Estate Platform. All rights reserved.
+            &copy; {new Date().getFullYear()} LD99 Real-E-Assets Platform. All rights reserved.
           </p>
           <div className={`flex items-center gap-5 text-[11px] ${text}`}>
             <span>Privacy Policy</span>

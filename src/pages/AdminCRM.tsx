@@ -329,7 +329,7 @@ export const AdminCRM: React.FC<{ user: any; onLogout: () => void }> = ({ user, 
             <h1 className="font-extrabold text-white text-base leading-tight capitalize">
               {view === "overview" ? "Dashboard Overview" : view === "pending" ? "Pending Approval" : view === "all-props" ? "All Listings" : view === "deals" ? "Deal Rooms" : view === "payments" ? "Payment Verification" : view === "visits" ? "Visit Management" : view === "users" ? "User Management" : "Broker Directory"}
             </h1>
-            <p className="text-slate-500 text-xs">LD99 Real Estate Admin CRM</p>
+            <p className="text-slate-500 text-xs">LD99 Real-E-Assets Admin CRM</p>
           </div>
 
           <div className="ml-auto flex items-center gap-3">

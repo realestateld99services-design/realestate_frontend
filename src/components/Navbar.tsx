@@ -68,7 +68,7 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
               </div>
               <div className="leading-tight">
                 <span className="block font-extrabold text-white text-sm tracking-tight">LD99</span>
-                <span className="block text-[9px] font-bold text-emerald-400 uppercase tracking-widest -mt-0.5">Real Estate</span>
+                <span className="block text-[9px] font-bold text-emerald-400 uppercase tracking-widest -mt-0.5">Real-E-Assets</span>
               </div>
             </Link>
 
